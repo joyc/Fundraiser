@@ -10,6 +10,7 @@ contract Fundraiser is Ownable {
     uint256 public donationsCount;
 
     event DonationReceived(address indexed donor, uint256 value);
+    event Withdraw(uint256 amount);
 
     struct Donation {
         uint256 value;
@@ -77,5 +78,12 @@ contract Fundraiser is Ownable {
         }
 
         return (values, dates);
+    }
+
+    // 出金
+    function withdraw() public onlyOwner {
+        uint256 balance = address(this).balance;
+        beneficiary.transfer(balance);
+        emit Withdraw(balance);
     }
 }
