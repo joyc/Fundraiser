@@ -12,5 +12,8 @@
     "test": "truffle test"
   },
   "author": "",
-  "license": "MIT"
+  "license": "MIT",
+  "devDependencies": {
+    "truffle-hdwallet-provider": "^1.0.17"
+  }
 }
