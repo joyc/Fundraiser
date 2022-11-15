@@ -86,4 +86,27 @@ contract("FundraiserFactory: fundraisers", (accounts) => {
             );
         });
     });
+
+    // 上限値テスト
+    describe("varying limits", async () => {
+        let factory;
+        beforeEach(async () => {
+            factory = await createFundraiserFactory(30, accounts);
+        });
+
+        it("returns 10 results when limit requested is 10", async () => {
+            const fundraisers = await factory.fundraisers(10, 0);
+            assert.equal(fundraisers.length, 10, "results size should be 10");
+        });
+        // xitはテストに「保留中」のマークを付ける
+        it("returns 20 results when limit requested is 20", async () => {
+            const fundraisers = await factory.fundraisers(20, 0);
+            assert.equal(fundraisers.length, 20, "results size should be 20");
+        });
+
+        it("returns 20 results when limit requested is 30", async () => {
+            const fundraisers = await factory.fundraisers(30, 0);
+            assert.equal(fundraisers.length, 20, "results size should be 20");
+        });
+    });
 });

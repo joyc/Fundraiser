@@ -4,6 +4,8 @@ pragma solidity >=0.4.22 <0.9.0;
 import "./Fundraiser.sol";
 
 contract FundraiserFactory {
+    // fundraisers関数から返すことができるアイテムの最大数
+    uint256 constant maxLimit = 20;
     Fundraiser[] private _fundraisers;
 
     event FundraiserCreated(
@@ -39,6 +41,12 @@ contract FundraiserFactory {
         view
         returns (Fundraiser[] memory coll)
     {
+        // インスタンス数がlimitのうち小さいほうのサイズになる
+        uint256 size = fundraisersCount() < limit ? fundraisersCount() : limit;
+        // サイズはmaxLimitを超えてはならない
+        size = size < maxLimit ? size : maxLimit;
+        coll = new Fundraiser[](size);
+
         return coll;
     }
 }
