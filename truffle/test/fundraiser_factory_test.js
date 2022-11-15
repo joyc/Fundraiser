@@ -50,3 +50,40 @@ contract("FundraiserFactory: createFundraise", (accounts) => {
         assert.equal(actualEvent, expectedEvent, "events should match");
     });
 });
+
+contract("FundraiserFactory: fundraisers", (accounts) => {
+    async function createFundraiserFactory(fundraiserCount, accounts) {
+        const factory = await FundraiserFactoryContract.new();
+        await addFundraisers(factory, fundraiserCount, accounts);
+        return factory;
+    }
+
+    async function addFundraisers(factory, count, accounts) {
+        const name = "Beneficiary";
+        const lowerCaseName = name.toLowerCase();
+        const beneficiary = accounts[1];
+
+        for (let i = 0; i < count; i++) {
+            await factory.createFundraiser(
+                // 一連のFundraiserインスタンスを作成し、それぞれをインデックスで区別する
+                `${name} ${i}`,
+                `${lowerCaseName}${i}.com`,
+                `${lowerCaseName}${i}.png`,
+                `Description for ${name} ${i}`,
+                beneficiary
+            );
+        }
+    }
+
+    describe("when fundraisers collection is empty", () => {
+        it("returns an empty collection", async () => {
+            const factory = await createFundraiserFactory(0, accounts);
+            const fundraisers = await factory.fundraisers(10, 0);
+            assert.equal(
+                fundraisers.length,
+                0,
+                "collection should be empty"
+            );
+        });
+    });
+});
