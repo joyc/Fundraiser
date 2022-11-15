@@ -34,4 +34,19 @@ contract("FundraiserFactory: createFundraise", (accounts) => {
             "should increment by 1"
         );
     });
+    // FundraiserCreated event test
+    it("emits the FundraiserCreated event", async () => {
+        fundraiserFactory = await FundraiserFactoryContract.deployed();
+        const tx = await fundraiserFactory.createFundraiser(
+            name,
+            url,
+            imageURL,
+            description,
+            beneficiary
+        );
+        const expectedEvent = "FundraiserCreated";
+        const actualEvent = tx.logs[0].event;
+
+        assert.equal(actualEvent, expectedEvent, "events should match");
+    });
 });
